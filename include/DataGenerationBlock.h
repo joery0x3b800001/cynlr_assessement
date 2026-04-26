@@ -2,24 +2,6 @@
 /**
  * @file    DataGenerationBlock.h
  * @brief   Simulates a line-scan camera - produces PixelPair every T nanoseconds.
- *
- * Two modes (switchable at runtime via PipelineConfig::sourceMode):
- *
- *   RandomGenerator - two independent std::mt19937 engines produce uniform
- *                     uint8_t values, emulating an infinite cloth/paper roll.
- *
- *   CsvFile         - reads a pre-built 2-D array from a CSV file (one row per
- *                     line, comma-separated uint values 0-255).  Used for
- *                     deterministic unit testing and submission validation.
- *
- * Timing discipline
- * -----------------
- * The worker thread sleeps for T ns between iterations using a busy-wait loop
- * anchored on steady_clock.  Sleeping with nanosecond precision is platform-
- * dependent; the busy-wait gives tighter latency at the cost of one CPU core,
- * which is acceptable for a real-time scanner.
- * An optional sleep-then-spin hybrid is used: sleep for (T - SPIN_GUARD_NS)
- * then spin for the remainder to avoid overshooting.
  */
 
 #include "IProcessBlock.h"
@@ -63,10 +45,8 @@ namespace cynlr
     private:
         void workerLoop();
 
-        // ── CSV helpers ────────────────────────────────────────────────────────
-        bool loadCsv(); ///< Parse csvPath_ into csvData_
+        bool loadCsv();
 
-        // ── Members ───────────────────────────────────────────────────────────
         const PipelineConfig &cfg_;
         RingBuffer<PixelPair, PipelineConfig::RING_CAPACITY> &outBuf_;
 

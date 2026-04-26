@@ -17,8 +17,6 @@
 namespace cynlr
 {
 
-    // ── Constructor / Destructor ───────────────────────────────────────────────
-
     DataGenerationBlock::DataGenerationBlock(
         const PipelineConfig &cfg,
         RingBuffer<PixelPair, PipelineConfig::RING_CAPACITY> &outBuf)
@@ -31,8 +29,6 @@ namespace cynlr
         stop();
         join();
     }
-
-    // ── IProcessBlock interface ────────────────────────────────────────────────
 
     bool DataGenerationBlock::configure()
     {
@@ -74,22 +70,17 @@ namespace cynlr
         }
     }
 
-    // ── Worker thread ──────────────────────────────────────────────────────────
-
     void DataGenerationBlock::workerLoop()
     {
         using Clock = std::chrono::steady_clock;
 
-        // ── Random generator setup ─────────────────────────────────────────────
         std::mt19937 rng(std::random_device{}());
         std::uniform_int_distribution<int> dist(0, 255);
 
-        // ── CSV mode state ─────────────────────────────────────────────────────
         std::size_t csvRow{0};
-        std::size_t csvCol{0}; // advances by 2 per iteration
+        std::size_t csvCol{0};
 
         const uint64_t periodNs = cfg_.periodNs;
-        // sleepNs = T minus the spin guard, used below in sleep_until
         const uint64_t sleepNs [[maybe_unused]] = (periodNs > SPIN_GUARD_NS)
                                                       ? (periodNs - SPIN_GUARD_NS)
                                                       : 0;
@@ -104,7 +95,6 @@ namespace cynlr
 
             profiler_.begin();
 
-            // ── Generate two consecutive elements ──────────────────────────────
             PixelPair pair;
 
             if (cfg_.sourceMode == DataSourceMode::RandomGenerator)
@@ -114,10 +104,8 @@ namespace cynlr
             }
             else
             {
-                // CSV mode: read two columns from current position
                 if (csvRow >= csvRows_)
                 {
-                    // End of file - send EOS and stop
                     pair.eos = true;
                     while (!outBuf_.push(pair))
                     {
@@ -138,7 +126,6 @@ namespace cynlr
                 }
             }
 
-            // ── Push to ring buffer (spin until space available) ───────────────
             while (!outBuf_.push(pair))
             {
                 std::this_thread::yield();
@@ -146,24 +133,16 @@ namespace cynlr
 
             profiler_.end();
 
-            // ── Timing discipline: sleep + busy-wait to hit deadline ───────────
             deadline += std::chrono::nanoseconds(periodNs);
-
-            // Sleep the bulk of T
             auto wakeTime = deadline - std::chrono::nanoseconds(SPIN_GUARD_NS);
             std::this_thread::sleep_until(wakeTime);
-
-            // Spin for the remaining guard interval
             while (Clock::now() < deadline)
             {
-                // busy spin - keeps latency deterministic
             }
         }
 
         std::cout << "[DataGenerationBlock] Worker finished.\n";
     }
-
-    // ── CSV loader ─────────────────────────────────────────────────────────────
 
     bool DataGenerationBlock::loadCsv()
     {

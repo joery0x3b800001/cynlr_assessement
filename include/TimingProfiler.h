@@ -53,7 +53,6 @@ namespace cynlr
             return ns;
         }
 
-        // ── Accessors ──────────────────────────────────────────────────────────
         uint64_t count() const noexcept { return count_; }
         uint64_t minNs() const noexcept { return minNs_; }
         uint64_t maxNs() const noexcept { return maxNs_; }

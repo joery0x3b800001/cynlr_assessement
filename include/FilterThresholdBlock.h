@@ -2,31 +2,6 @@
 /**
  * @file    FilterThresholdBlock.h
  * @brief   Consumes PixelPairs, applies a 9-tap Gaussian filter, then thresholds.
- *
- * Algorithm summary (per element k)
- * -----------------------------------
- *  1. Collect window: [k-4, k-3, k-2, k-1, k, k+1, k+2, k+3, k+4]
- *     • Past 4 values stored in a circular history buffer.
- *     • Future 4 values buffered in a look-ahead queue.
- *  2. Dot-product with the Gaussian filter window (9 constants from spec).
- *  3. Compare filtered value against TV:
- *       filtered >= TV  →  output 1
- *       filtered <  TV  →  output 0
- *
- * Memory constraint adherence
- * ----------------------------
- * The look-ahead queue holds at most 4 future elements at any moment, and
- * the history buffer holds 4 past elements.  Total extra memory per logical
- * element stream: 8 uint8 values - well within the "≤ m" budget.
- *
- * The block processes elements one at a time (not pair-at-a-time) so that
- * the filter window is contiguous across pair boundaries - exactly as the
- * line-scan model requires.
- *
- * Throughput
- * ----------
- * The 9-multiply + 9-add convolution is ~18 FP ops per element.  On modern
- * x86 this executes in <10 ns, comfortably under the 100 ns threshold.
  */
 
 #include "IProcessBlock.h"
@@ -74,8 +49,6 @@ namespace cynlr
 
         inline const TimingProfiler &profiler() const noexcept { return profiler_; }
 
-        // ── Gaussian filter window (9 elements, symmetric) ─────────────────────
-        // Values taken verbatim from the problem statement.
         static constexpr std::array<double, 9> FILTER_WINDOW = {
             0.00025177,  // K-4
             0.008666992, // K-3
@@ -105,7 +78,6 @@ namespace cynlr
          */
         int applyThreshold(double filteredValue) const noexcept;
 
-        // ── Members ───────────────────────────────────────────────────────────
         const PipelineConfig &cfg_;
         RingBuffer<PixelPair, PipelineConfig::RING_CAPACITY> &inBuf_;
         OutputCallback onOutput_;

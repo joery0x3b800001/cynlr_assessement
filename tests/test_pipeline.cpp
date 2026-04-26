@@ -31,8 +31,6 @@
 #include <atomic>
 #include <mutex>
 
-// ── Micro test framework ───────────────────────────────────────────────────
-
 static int g_passed = 0;
 static int g_failed = 0;
 
@@ -65,8 +63,6 @@ static int g_failed = 0;
     if (std::abs((a) - (b)) > (tol))                     \
     throw std::runtime_error(std::string("Not near: ") + \
                              std::to_string(a) + " vs " + std::to_string(b))
-
-// ── Test: RingBuffer basic push/pop ───────────────────────────────────────
 
 TEST(RingBuffer_PushPop)
 {
@@ -104,8 +100,6 @@ TEST(RingBuffer_FIFO_Order)
         ASSERT(v.has_value() && *v == i);
     }
 }
-
-// ── Test: Gaussian filter math ─────────────────────────────────────────────
 
 TEST(Filter_KnownInput_AllOnes)
 {
@@ -150,8 +144,6 @@ TEST(Filter_KnownInput_DC)
     ASSERT_NEAR(result, V, 1.0); // within 1 unit for DC input
 }
 
-// ── Test: Threshold logic ─────────────────────────────────────────────────
-
 TEST(Threshold_AboveTV)
 {
     cynlr::PipelineConfig cfg;
@@ -176,8 +168,6 @@ TEST(Threshold_ExactlyTV)
     // spec says >= TV → 1
     ASSERT(0.5 >= cfg.thresholdTV);
 }
-
-// ── Test: CSV loading ─────────────────────────────────────────────────────
 
 TEST(DataGen_CsvLoad)
 {
@@ -220,8 +210,6 @@ TEST(DataGen_CsvLoad)
     ASSERT(received[2].pixel1 == 50 && received[2].pixel2 == 60);
     ASSERT(received[3].pixel1 == 70 && received[3].pixel2 == 80);
 }
-
-// ── Test: End-to-end pipeline with known CSV ──────────────────────────────
 
 TEST(EndToEnd_KnownCsv)
 {
@@ -270,8 +258,6 @@ TEST(EndToEnd_KnownCsv)
     for (int o : outputs)
         ASSERT(o == 1);
 }
-
-// ── Test: Throughput constraint (<100 ns per element) ─────────────────────
 
 TEST(Throughput_FilterUnder100ns)
 {

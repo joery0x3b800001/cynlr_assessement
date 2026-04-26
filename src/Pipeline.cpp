@@ -25,8 +25,6 @@ namespace cynlr
         shutdown();
     }
 
-    // ── Build ──────────────────────────────────────────────────────────────────
-
     bool Pipeline::build()
     {
         if (built_)
@@ -36,7 +34,6 @@ namespace cynlr
 
         auto finalCallback = outputCallback_ ? outputCallback_ : [](uint64_t, uint8_t, double, int) {};
 
-        // ── Instantiate blocks ─────────────────────────────────────────────────
         auto dataGen = std::make_unique<DataGenerationBlock>(cfg_, channel_);
         auto filter = std::make_unique<FilterThresholdBlock>(cfg_, channel_,
                                                              std::move(finalCallback));
@@ -56,8 +53,6 @@ namespace cynlr
         std::cout << "[Pipeline] Built with " << blocks_.size() << " blocks.\n";
         return true;
     }
-
-    // ── Run ────────────────────────────────────────────────────────────────────
 
     void Pipeline::run()
     {
@@ -91,8 +86,6 @@ namespace cynlr
         }
     }
 
-    // ── Shutdown ───────────────────────────────────────────────────────────────
-
     void Pipeline::shutdown()
     {
         if (!built_)
@@ -112,7 +105,6 @@ namespace cynlr
             (*it)->join();
         }
 
-        // ── Profiling report ───────────────────────────────────────────────────
         std::cout << "\n══════════════════════════════════════════════════\n";
         std::cout << "  TIMING & PROFILING REPORT";
         std::cout << "\n══════════════════════════════════════════════════\n";

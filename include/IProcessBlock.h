@@ -2,17 +2,6 @@
 /**
  * @file    IProcessBlock.h
  * @brief   Abstract interface for all pipeline process blocks.
- *
- * Design intent
- * -------------
- * Every stage in the scanner pipeline (Data Generation, Filter & Threshold,
- * and any future block) implements this interface.  The pipeline harness only
- * knows about IProcessBlock, so new blocks can be added with ZERO changes to
- * existing code - satisfying the modularity and scalability requirements.
- *
- * Lifecycle
- * ---------
- *   configure() → start() → [running: produces/consumes data every T] → stop() → join()
  */
 
 #include <cstdint>

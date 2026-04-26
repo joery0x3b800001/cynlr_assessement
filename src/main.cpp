@@ -1,8 +1,6 @@
 /**
  * @file    main.cpp
  * @brief   Entry point for the CynLr line-scan scanner pipeline.
- *
- * Updated with CSV dump support for input/output verification.
  */
 
 #include "CliParser.h"

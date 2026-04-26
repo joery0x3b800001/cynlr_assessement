@@ -13,10 +13,7 @@
 namespace cynlr
 {
 
-    // ── constexpr definition (ODR) ─────────────────────────────────────────────
     constexpr std::array<double, 9> FilterThresholdBlock::FILTER_WINDOW;
-
-    // ── Constructor / Destructor ───────────────────────────────────────────────
 
     FilterThresholdBlock::FilterThresholdBlock(
         const PipelineConfig &cfg,
@@ -31,8 +28,6 @@ namespace cynlr
         stop();
         join();
     }
-
-    // ── IProcessBlock interface ────────────────────────────────────────────────
 
     bool FilterThresholdBlock::configure()
     {
@@ -66,22 +61,18 @@ namespace cynlr
         }
     }
 
-    // ── Static helpers ─────────────────────────────────────────────────────────
-
     double FilterThresholdBlock::applyFilter(
         const std::array<double, 9> &window) noexcept
     {
-        double result = 0.0;
-        result += window[0] * FILTER_WINDOW[0];
-        result += window[1] * FILTER_WINDOW[1];
-        result += window[2] * FILTER_WINDOW[2];
-        result += window[3] * FILTER_WINDOW[3];
-        result += window[4] * FILTER_WINDOW[4];
-        result += window[5] * FILTER_WINDOW[5];
-        result += window[6] * FILTER_WINDOW[6];
-        result += window[7] * FILTER_WINDOW[7];
-        result += window[8] * FILTER_WINDOW[8];
-        return result;
+        return window[0] * FILTER_WINDOW[0] +
+               window[1] * FILTER_WINDOW[1] +
+               window[2] * FILTER_WINDOW[2] +
+               window[3] * FILTER_WINDOW[3] +
+               window[4] * FILTER_WINDOW[4] +
+               window[5] * FILTER_WINDOW[5] +
+               window[6] * FILTER_WINDOW[6] +
+               window[7] * FILTER_WINDOW[7] +
+               window[8] * FILTER_WINDOW[8];
     }
 
     int FilterThresholdBlock::applyThreshold(double filteredValue) const noexcept
@@ -114,8 +105,6 @@ namespace cynlr
 
 #elif defined(_WIN32) || defined(_WIN64)
         // Windows MSVC: Inline assembly isn't supported for x64.
-        // We use a logical evaluation that compilers usually optimize to
-        // a conditional set (SETCC) instruction, avoiding a jump.
         return (filteredValue >= tv) ? 1 : 0;
 
 #else
@@ -124,7 +113,6 @@ namespace cynlr
 #endif
     }
 
-    // ── Worker thread ──────────────────────────────────────────────────────────
     /**
      * Strategy for the look-ahead filter
      * ------------------------------------
@@ -151,45 +139,30 @@ namespace cynlr
             lookahead_.push_back(elem);
 
             // 2. Can we filter the front element?
-            //    We need HALF_WINDOW future elements after the candidate.
-            //    Candidate is at lookahead_[0]; its future elements are [1..4].
-            //    So we need lookahead_.size() > HALF_WINDOW.
             while (lookahead_.size() > static_cast<std::size_t>(HALF_WINDOW))
             {
-
                 profiler_.begin();
 
-                // Build the 9-element window
                 std::array<double, 9> window;
-
-                // Past 4 elements from circular history
-                // histPos_ points to the OLDEST entry in history_
                 for (int i = 0; i < HALF_WINDOW; ++i)
                 {
                     window[i] = static_cast<double>(
                         history_[(histPos_ + i) % HALF_WINDOW]);
                 }
-                // Current (K) and future 4
                 for (int i = 0; i <= HALF_WINDOW; ++i)
                 {
                     window[HALF_WINDOW + i] = static_cast<double>(lookahead_[i]);
                 }
 
-                // 3. Filter
                 double filtered = applyFilter(window);
-
-                // 4. Threshold
                 int thresholded = applyThreshold(filtered);
-
                 uint8_t rawVal = lookahead_.front();
 
-                // 5. Output
                 if (onOutput_)
                 {
                     onOutput_(elementIndex_, rawVal, filtered, thresholded);
                 }
 
-                // 6. Advance history
                 history_[histPos_] = rawVal;
                 histPos_ = (histPos_ + 1) % HALF_WINDOW;
 
