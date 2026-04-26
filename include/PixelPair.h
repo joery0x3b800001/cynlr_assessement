@@ -15,13 +15,13 @@
 
 namespace cynlr
 {
-    #pragma pack(push, 1)
+#pragma pack(push, 1)
     struct PixelPair
     {
         uint8_t pixel1{0}; ///< First  consecutive element (column index 2k-1)
         uint8_t pixel2{0}; ///< Second consecutive element (column index 2k)
         bool eos{false};   ///< End-Of-Stream sentinel - tells consumer to drain and stop
     };
-    #pragma pack(pop)
+#pragma pack(pop)
 
 } // namespace cynlr

@@ -29,7 +29,7 @@ namespace cynlr
         uint64_t periodNs{1'000'000}; ///< Process time T in nanoseconds (>=100 ns)
 
         DataSourceMode sourceMode{DataSourceMode::RandomGenerator};
-        std::string csvPath{}; ///< Path to CSV when in CsvFile mode
+        std::string csvPath{};  ///< Path to CSV when in CsvFile mode
         std::string dumpPath{}; ///< Path to export raw/filtered results to CSV
 
         static constexpr std::size_t RING_CAPACITY = 256; ///< Must be > max(m)+filter half-window
