@@ -34,6 +34,28 @@
 static int g_passed = 0;
 static int g_failed = 0;
 
+// ── Cross-platform temp directory helper ─────────────────────────────────────
+#ifdef _WIN32
+#include <windows.h>
+static std::string getTempPath(const std::string &filename)
+{
+    char buf[MAX_PATH];
+    DWORD len = GetTempPathA(MAX_PATH, buf);
+    if (len == 0)
+        return filename;
+    std::string p(buf, len);
+    if (p.back() != '\\' && p.back() != '/')
+        p += '\\';
+    return p + filename;
+}
+#else
+static std::string getTempPath(const std::string &filename)
+{
+    return "/tmp/" + filename;
+}
+#endif
+// ─────────────────────────────────────────────────────────────────────────────
+
 #define TEST(name)                                                        \
     static void name();                                                   \
     struct _Reg_##name                                                    \
@@ -172,7 +194,7 @@ TEST(Threshold_ExactlyTV)
 TEST(DataGen_CsvLoad)
 {
     // Write a temp CSV
-    const std::string path = "/tmp/cynlr_test.csv";
+    const std::string path = getTempPath("cynlr_test.csv");
     {
         std::ofstream f(path);
         f << "10, 20, 30, 40\n";
@@ -216,7 +238,7 @@ TEST(EndToEnd_KnownCsv)
     // 1 row, 8 columns, all value 200
     // After filtering a DC=200 signal, output ≈ 200 * sum(weights) ≈ 200
     // With TV = 100, all thresholded outputs should be 1
-    const std::string path = "/tmp/cynlr_e2e.csv";
+    const std::string path = getTempPath("cynlr_e2e.csv");
     {
         std::ofstream f(path);
         f << "200,200,200,200,200,200,200,200\n";
