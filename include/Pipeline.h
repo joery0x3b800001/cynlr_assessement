@@ -22,8 +22,8 @@
 #include "IProcessBlock.h"
 #include "PipelineConfig.h"
 #include "PixelPair.h"
-#include "cynlr_export.h"
 #include "RingBuffer.h"
+#include "cynlr_export.h"
 
 #include <vector>
 #include <memory>
