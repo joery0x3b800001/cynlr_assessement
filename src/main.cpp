@@ -105,7 +105,10 @@ int main(int argc, char *argv[])
     pipeline.run(); // blocks until EOS or Ctrl-C
 
     if (dumpFile)
+    {
         dumpFile->close();
+    }
+
     pipeline.shutdown();
 
     return 0;
