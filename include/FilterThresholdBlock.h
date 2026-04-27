@@ -9,6 +9,7 @@
 #include "PipelineConfig.h"
 #include "RingBuffer.h"
 #include "TimingProfiler.h"
+#include "cynlr_export.h"
 
 #include <thread>
 #include <atomic>
@@ -25,7 +26,7 @@ namespace cynlr
     using OutputCallback = std::function<void(uint64_t elementIndex, uint8_t rawValue,
                                               double filteredValue, int thresholded)>;
 
-    class FilterThresholdBlock : public IProcessBlock
+    class CYNLR_API FilterThresholdBlock : public IProcessBlock
     {
     public:
         /**

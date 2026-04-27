@@ -22,6 +22,7 @@
 #include "IProcessBlock.h"
 #include "PipelineConfig.h"
 #include "PixelPair.h"
+#include "cynlr_export.h"
 #include "RingBuffer.h"
 
 #include <vector>
@@ -31,7 +32,7 @@
 namespace cynlr
 {
 
-    class Pipeline
+    class CYNLR_API Pipeline
     {
     public:
         using OutputCallback = std::function<void(uint64_t idx, uint8_t raw, double filtered, int thresholded)>;

@@ -9,6 +9,7 @@
 #include "PipelineConfig.h"
 #include "RingBuffer.h"
 #include "TimingProfiler.h"
+#include "cynlr_export.h"
 
 #include <thread>
 #include <atomic>
@@ -19,7 +20,7 @@
 namespace cynlr
 {
 
-    class DataGenerationBlock : public IProcessBlock
+    class CYNLR_API DataGenerationBlock : public IProcessBlock
     {
     public:
         /**
