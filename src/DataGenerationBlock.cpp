@@ -136,9 +136,7 @@ namespace cynlr
             deadline += std::chrono::nanoseconds(periodNs);
             auto wakeTime = deadline - std::chrono::nanoseconds(SPIN_GUARD_NS);
             std::this_thread::sleep_until(wakeTime);
-            while (Clock::now() < deadline)
-            {
-            }
+            while (Clock::now() < deadline);
         }
 
         std::cout << "[DataGenerationBlock] Worker finished.\n";
