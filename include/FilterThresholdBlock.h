@@ -64,7 +64,7 @@ namespace cynlr
 
         static constexpr int HALF_WINDOW = 4; ///< Elements on each side of K
 
-    protected:
+    private:
         void workerLoop();
 
         /**
@@ -80,7 +80,6 @@ namespace cynlr
          */
         int applyThreshold(double filteredValue) const noexcept;
 
-    private:
         const PipelineConfig &cfg_;
         RingBuffer<PixelPair, PipelineConfig::RING_CAPACITY> &inBuf_;
         OutputCallback onOutput_;

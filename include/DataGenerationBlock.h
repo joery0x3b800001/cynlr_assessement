@@ -38,17 +38,16 @@ namespace cynlr
         void start() override;
         void stop() override;
         void join() override;
-        std::string name() const override { return "DataGenerationBlock"; }
+        inline std::string name() const override { return "DataGenerationBlock"; }
 
         /** @brief Expose profiler for post-run report generation. */
         inline const TimingProfiler &profiler() const noexcept { return profiler_; }
 
-    protected:
+    private:
         void workerLoop();
 
         bool loadCsv();
 
-    private:
         const PipelineConfig &cfg_;
         RingBuffer<PixelPair, PipelineConfig::RING_CAPACITY> &outBuf_;
 
