@@ -12,7 +12,6 @@
 
 namespace cynlr
 {
-
     constexpr std::array<double, 9> FilterThresholdBlock::FILTER_WINDOW;
 
     FilterThresholdBlock::FilterThresholdBlock(
@@ -219,5 +218,4 @@ namespace cynlr
         std::cout << "[FilterThresholdBlock] Worker finished. "
                   << "Processed " << elementIndex_ << " elements.\n";
     }
-
 }

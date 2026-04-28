@@ -9,7 +9,6 @@
 
 namespace cynlr
 {
-
     /**
      * @interface IProcessBlock
      * Pure-abstract base class for every processing stage.
@@ -37,5 +36,4 @@ namespace cynlr
         /** @brief Human-readable name for logging / diagnostics. */
         virtual std::string name() const = 0;
     };
-
 }

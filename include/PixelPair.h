@@ -23,5 +23,4 @@ namespace cynlr
         bool eos{false};   ///< End-Of-Stream sentinel - tells consumer to drain and stop
     };
 #pragma pack(pop)
-
 }

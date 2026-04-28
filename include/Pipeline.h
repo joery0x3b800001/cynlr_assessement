@@ -31,7 +31,6 @@
 
 namespace cynlr
 {
-
     class CYNLR_API Pipeline
     {
     public:
@@ -66,5 +65,4 @@ namespace cynlr
 
         bool built_{false};
     };
-
 }

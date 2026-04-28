@@ -24,7 +24,6 @@
 
 namespace cynlr
 {
-
     inline PipelineConfig parseArgs(int argc, char *argv[])
     {
         PipelineConfig cfg;
@@ -105,5 +104,4 @@ namespace cynlr
 
         return cfg;
     }
-
-} // namespace cynlr
+}

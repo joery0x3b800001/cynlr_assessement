@@ -21,7 +21,6 @@
 
 namespace cynlr
 {
-
     /** Signature of the output callback delivered to external consumers. */
     using OutputCallback = std::function<void(uint64_t elementIndex, uint8_t rawValue,
                                               double filteredValue, int thresholded)>;
@@ -97,5 +96,4 @@ namespace cynlr
         TimingProfiler profiler_{"FilterThresholdBlock"};
         TimingProfiler throughputProf_{"SuccessivePixelThroughput"};
     };
-
 }

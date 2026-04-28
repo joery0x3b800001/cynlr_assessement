@@ -19,7 +19,6 @@
 
 namespace cynlr
 {
-
     class CYNLR_API DataGenerationBlock : public IProcessBlock
     {
     public:
@@ -62,5 +61,4 @@ namespace cynlr
 
         static constexpr uint64_t SPIN_GUARD_NS = 50'000; ///< 50 µs spin guard
     };
-
 }
