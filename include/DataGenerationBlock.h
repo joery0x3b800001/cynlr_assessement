@@ -43,11 +43,12 @@ namespace cynlr
         /** @brief Expose profiler for post-run report generation. */
         inline const TimingProfiler &profiler() const noexcept { return profiler_; }
 
-    private:
+    protected:
         void workerLoop();
 
         bool loadCsv();
 
+    private:
         const PipelineConfig &cfg_;
         RingBuffer<PixelPair, PipelineConfig::RING_CAPACITY> &outBuf_;
 

@@ -61,9 +61,10 @@ namespace cynlr
             0.008666992, // K+3
             0.000125885  // K+4  (note: asymmetric tail per spec)
         };
+
         static constexpr int HALF_WINDOW = 4; ///< Elements on each side of K
 
-    private:
+    protected:
         void workerLoop();
 
         /**
@@ -79,6 +80,7 @@ namespace cynlr
          */
         int applyThreshold(double filteredValue) const noexcept;
 
+    private:
         const PipelineConfig &cfg_;
         RingBuffer<PixelPair, PipelineConfig::RING_CAPACITY> &inBuf_;
         OutputCallback onOutput_;
