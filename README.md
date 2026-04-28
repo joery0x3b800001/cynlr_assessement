@@ -59,7 +59,7 @@ To verify the signal processing results (Raw Sensor Input vs. Gaussian Smoothed 
 
 2.  **Run Visualizer:**
     ```bash
-    python3 visualise_output.py --csv data/out.csv --tv 100
+    python3 visualize_pipeline_output.py --csv data/out.csv --tv 100
     ```
 
 
