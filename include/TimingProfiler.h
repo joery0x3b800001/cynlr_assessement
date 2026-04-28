@@ -20,7 +20,6 @@
 
 namespace cynlr
 {
-
     class TimingProfiler
     {
     public:
@@ -85,5 +84,4 @@ namespace cynlr
         uint64_t minNs_{std::numeric_limits<uint64_t>::max()};
         uint64_t maxNs_{0};
     };
-
-} // namespace cynlr
+}

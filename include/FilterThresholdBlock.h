@@ -98,4 +98,4 @@ namespace cynlr
         TimingProfiler throughputProf_{"SuccessivePixelThroughput"};
     };
 
-} // namespace cynlr
+}

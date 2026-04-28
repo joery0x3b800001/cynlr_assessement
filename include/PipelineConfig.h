@@ -35,4 +35,4 @@ namespace cynlr
         static constexpr std::size_t RING_CAPACITY = 256; ///< Must be > max(m)+filter half-window
     };
 
-} // namespace cynlr
+}

@@ -24,4 +24,4 @@ namespace cynlr
     };
 #pragma pack(pop)
 
-} // namespace cynlr
+}

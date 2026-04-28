@@ -14,7 +14,6 @@
 
 namespace cynlr
 {
-
     template <typename T, std::size_t Capacity>
     class RingBuffer
     {
@@ -55,7 +54,9 @@ namespace cynlr
             const std::size_t h = head_.v.load(std::memory_order_relaxed);
             const std::size_t next = (h + 1u) & MASK; // bitmask, no div
             if (next == tail_.v.load(std::memory_order_acquire))
+            {
                 return false;
+            }
             ::new (slot(h)) T(item); // placement new
             head_.v.store(next, std::memory_order_release);
             return true;
@@ -65,11 +66,15 @@ namespace cynlr
         {
             const std::size_t t = tail_.v.load(std::memory_order_relaxed);
             if (t == head_.v.load(std::memory_order_acquire))
+            {
                 return std::nullopt;
+            }
             T *p = slot(t);
             T item(*p);
             if constexpr (!std::is_trivially_destructible_v<T>)
+            {
                 p->~T();
+            }
             tail_.v.store((t + 1u) & MASK, std::memory_order_release);
             return item;
         }
@@ -86,7 +91,9 @@ namespace cynlr
                 h = (h + 1u) & MASK;
             }
             if (count)
+            {
                 head_.v.store(h, std::memory_order_release);
+            }
             return count;
         }
 
@@ -101,11 +108,15 @@ namespace cynlr
                 T *p = slot(t);
                 out[i] = *p;
                 if constexpr (!std::is_trivially_destructible_v<T>)
+                {
                     p->~T();
+                }
                 t = (t + 1u) & MASK;
             }
             if (count)
+            {
                 tail_.v.store(t, std::memory_order_release);
+            }
             return count;
         }
 
@@ -134,5 +145,4 @@ namespace cynlr
             return std::launder(reinterpret_cast<T *>(storage_ + i * sizeof(T)));
         }
     };
-
-} // namespace cynlr
+}

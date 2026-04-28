@@ -220,4 +220,4 @@ namespace cynlr
                   << "Processed " << elementIndex_ << " elements.\n";
     }
 
-} // namespace cynlr
+}

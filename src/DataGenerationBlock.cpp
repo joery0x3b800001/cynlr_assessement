@@ -136,7 +136,8 @@ namespace cynlr
             deadline += std::chrono::nanoseconds(periodNs);
             auto wakeTime = deadline - std::chrono::nanoseconds(SPIN_GUARD_NS);
             std::this_thread::sleep_until(wakeTime);
-            while (Clock::now() < deadline);
+            while (Clock::now() < deadline)
+                ;
         }
 
         std::cout << "[DataGenerationBlock] Worker finished.\n";
@@ -146,7 +147,9 @@ namespace cynlr
     {
         std::ifstream file(cfg_.csvPath);
         if (!file.is_open())
+        {
             return false;
+        }
 
         std::vector<uint8_t> data;
         std::string line;
@@ -156,7 +159,9 @@ namespace cynlr
         while (std::getline(file, line))
         {
             if (line.empty())
+            {
                 continue;
+            }
             std::istringstream ss(line);
             std::string token;
             std::size_t col = 0;
@@ -187,11 +192,12 @@ namespace cynlr
         }
 
         if (rows == 0)
+        {
             return false;
+        }
 
         csvData_ = std::move(data);
         csvRows_ = rows;
         return true;
     }
-
-} // namespace cynlr
+}

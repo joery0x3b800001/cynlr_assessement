@@ -14,7 +14,6 @@
 
 namespace cynlr
 {
-
     Pipeline::Pipeline(const PipelineConfig &cfg)
         : cfg_(cfg), channel_()
     {
@@ -33,7 +32,6 @@ namespace cynlr
         }
 
         auto finalCallback = outputCallback_ ? outputCallback_ : [](uint64_t, uint8_t, double, int) {};
-
         auto dataGen = std::make_unique<DataGenerationBlock>(cfg_, channel_);
         auto filter = std::make_unique<FilterThresholdBlock>(cfg_, channel_,
                                                              std::move(finalCallback));
@@ -124,5 +122,4 @@ namespace cynlr
 
         built_ = false;
     }
-
-} // namespace cynlr
+}
