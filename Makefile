@@ -1,5 +1,5 @@
 # +----------------------------------------------------------------------------------------+
-# | Makefile - CynLr Line-Scan Scanner Pipeline (Fully Dynamic)                         |
+# | Makefile - CynLr Line-Scan Scanner Pipeline (Fully Dynamic)                            |
 # +----------------------------------------------------------------------------------------+
 
 CXX      := clang++
