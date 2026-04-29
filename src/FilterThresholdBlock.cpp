@@ -109,7 +109,6 @@ namespace cynlr
 #elif defined(_WIN32) || defined(_WIN64)
         // Windows MSVC: Inline assembly isn't supported for x64.
         return (filteredValue >= tv) ? 1 : 0;
-
 #else
         // Fallback for other platforms
         return (filteredValue >= tv) ? 1 : 0;
