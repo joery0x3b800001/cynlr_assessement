@@ -8,7 +8,7 @@
  *   • Running min / max / mean
  *
  * Designed to be cheap enough to leave enabled in release builds so that
- * the submission profiling report can be auto-generated from live data.
+ * the submission profiling report can be generated from live data.
  */
 
 #include <chrono>
