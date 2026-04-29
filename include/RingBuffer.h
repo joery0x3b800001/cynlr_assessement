@@ -14,6 +14,12 @@
 
 namespace cynlr
 {
+#if defined(__cpp_lib_hardware_interference_size)
+    static constexpr std::size_t CACHE_LINE_SIZE = std::hardware_destructive_interference_size;
+#else
+    static constexpr std::size_t CACHE_LINE_SIZE = 64; // Typical cache line (works on x86, ARM)
+#endif
+
     template <typename T, std::size_t Capacity>
     class RingBuffer
     {
@@ -22,10 +28,10 @@ namespace cynlr
 
         static constexpr std::size_t MASK = Capacity - 1u;
 
-        struct alignas(std::hardware_destructive_interference_size) PaddedAtomic
+        struct alignas(CACHE_LINE_SIZE) PaddedAtomic
         {
             std::atomic<std::size_t> v{0};
-            char _pad[std::hardware_destructive_interference_size - sizeof(std::atomic<std::size_t>)];
+            char _pad[CACHE_LINE_SIZE - sizeof(std::atomic<std::size_t>)];
             PaddedAtomic() noexcept : v(0) { (void)_pad; }
         };
 
