@@ -32,10 +32,10 @@ int main(int argc, char *argv[])
     std::signal(SIGINT, signalHandler);
     std::signal(SIGTERM, signalHandler);
 
-    std::cout << "╔══════════════════════════════════════════════════╗\n"
-              << "║   CynLr Line-Scan Scanner Pipeline               ║\n"
-              << "║   Evaluation 1 - Programming Fundamentals C++    ║\n"
-              << "╚══════════════════════════════════════════════════╝\n\n";
+    std::cout << "+--------------------------------------------------+\n"
+              << "|   CynLr Line-Scan Scanner Pipeline                |\n"
+              << "|   Evaluation 1 - Programming Fundamentals C++     |\n"
+              << "+--------------------------------------------------+\n\n";
 
     cynlr::PipelineConfig cfg;
     try

@@ -22,6 +22,7 @@
 #include "PipelineConfig.h"
 
 #include <iostream>
+#include <string>
 #include <cmath>
 #include <vector>
 #include <fstream>
@@ -315,16 +316,17 @@ TEST(Throughput_FilterUnder100ns)
 
 int main()
 {
-    std::cout << "\n══════════════════════════════════════════════════\n";
-    std::cout << "  CynLr Unit Test Suite\n";
-    std::cout << "══════════════════════════════════════════════════\n\n";
+    std::cout << "\n+--------------------------------------------------+\n";
+    std::cout << "|  CynLr Unit Test Suite                           |\n";
+    std::cout << "+--------------------------------------------------+\n\n";
 
     // Tests self-register via static constructors above
 
-    std::cout << "\n──────────────────────────────────────────────────\n";
-    std::cout << "  Results: " << g_passed << " passed, "
-              << g_failed << " failed.\n";
-    std::cout << "══════════════════════════════════════════════════\n\n";
+    std::cout << "\n+--------------------------------------------------+\n";
+    std::string results = "  Results: " + std::to_string(g_passed) + " passed, " + std::to_string(g_failed) + " failed.";
+    if (results.length() < 48) results.append(48 - results.length(), ' ');
+    std::cout << "| " << results << " |\n";
+    std::cout << "+--------------------------------------------------+\n\n";
 
     return (g_failed == 0) ? 0 : 1;
 }

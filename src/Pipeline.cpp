@@ -103,9 +103,9 @@ namespace cynlr
             (*it)->join();
         }
 
-        std::cout << "\n══════════════════════════════════════════════════\n";
-        std::cout << "  TIMING & PROFILING REPORT";
-        std::cout << "\n══════════════════════════════════════════════════\n";
+        std::cout << "\n+--------------------------------------------------+\n";
+        std::cout << "|  TIMING & PROFILING REPORT                       |\n";
+        std::cout << "+--------------------------------------------------+\n";
 
         for (const auto &block : blocks_)
         {
@@ -118,7 +118,7 @@ namespace cynlr
                 std::cout << ftb->profiler().report() << "\n";
             }
         }
-        std::cout << "══════════════════════════════════════════════════\n\n";
+        // Profiling report already wrapped above
 
         built_ = false;
     }
