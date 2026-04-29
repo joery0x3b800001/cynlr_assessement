@@ -3,13 +3,22 @@
 # ══════════════════════════════════════════════════════════════════════════════
 
 CXX      := clang++
-CXXFLAGS := -std=c++17 -Wall -Wextra -Wpedantic -O3 -ffast-math -pthread -march=native
+CXXFLAGS := -std=c++17 -Wall -Wextra -Wpedantic -O3 -ffast-math \
+						-pthread -march=native -mtune=native \
+						-funroll-loops -fomit-frame-pointer
 INCLUDES := -Iinclude
 LDFLAGS  := -pthread
 
 BUILD_DIR := build
 SRC_DIR   := src
 TEST_DIR  := tests
+
+# ────────── Compiler Specific flags ──────────
+ifeq ($(findstring clang++,$(CXX)),clang++)
+	CXXFLAGS += -Wno-unknown-warning-option
+else
+	CXXFLAGS += -Wno-interference-size
+endif
 
 # ── Platform Detection & Path Logic ───────────────────────────────────────────
 ifeq ($(OS),Windows_NT)
@@ -21,7 +30,11 @@ ifeq ($(OS),Windows_NT)
     MKDIR       := $(PWSH_UTF8) "New-Item -ItemType Directory -Force"
     RM          := $(PWSH_UTF8) "Remove-Item -Recurse -Force"
     IMPLIB      := $(BUILD_DIR)/cynlr.lib
-    LIB_FLAGS   := -shared -DCYNLR_BUILDING_DLL -Xlinker /IMPLIB:$(IMPLIB)
+    ifeq ($(findstring clang++,$(CXX)),clang++)
+        LIB_FLAGS := -shared -DCYNLR_BUILDING_DLL -Xlinker /IMPLIB:$(IMPLIB)
+    else
+        LIB_FLAGS := -shared -DCYNLR_BUILDING_DLL -Wl,--out-implib,$(IMPLIB)
+    endif
     RUN_PREFIX  := $(BUILD_DIR)\\
     LD_SEARCH   := -L$(BUILD_DIR) -lcynlr
 else

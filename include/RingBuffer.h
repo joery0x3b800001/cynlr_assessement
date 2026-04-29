@@ -22,7 +22,7 @@ namespace cynlr
 
         static constexpr std::size_t MASK = Capacity - 1u;
 
-        struct alignas(64) PaddedAtomic
+        struct alignas(std::hardware_destructive_interference_size) PaddedAtomic
         {
             std::atomic<std::size_t> v{0};
             char _pad[std::hardware_destructive_interference_size - sizeof(std::atomic<std::size_t>)];

@@ -63,15 +63,19 @@ namespace cynlr
     double FilterThresholdBlock::applyFilter(
         const std::array<double, 9> &window) noexcept
     {
-        return window[0] * FILTER_WINDOW[0] +
-               window[1] * FILTER_WINDOW[1] +
-               window[2] * FILTER_WINDOW[2] +
-               window[3] * FILTER_WINDOW[3] +
-               window[4] * FILTER_WINDOW[4] +
-               window[5] * FILTER_WINDOW[5] +
-               window[6] * FILTER_WINDOW[6] +
-               window[7] * FILTER_WINDOW[7] +
-               window[8] * FILTER_WINDOW[8];
+        double result = 0.0;
+
+#if defined(__clang__)
+#pragma clang loop unroll(full)
+#elif defined(__GNUC__)
+#pragma GCC unroll 9
+#endif
+        for (int i = 0; i < 9; ++i)
+        {
+            result += window[i] * FILTER_WINDOW[i];
+        }
+
+        return result;
     }
 
     int FilterThresholdBlock::applyThreshold(double filteredValue) const noexcept
